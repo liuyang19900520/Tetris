@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
@@ -14,7 +15,10 @@ import com.liuyang19900520.tetris.controller.GameController;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     //声明游戏区域
-    private View view;
+    private View gameView;
+
+    //声明下一塊預覽区域
+    private View nextView;
 
     //声明游戏控制器
     public GameController gameController;
@@ -27,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (msg.what) {
                 //重绘
                 case Config.MSG_INVALIDATE:
-                    view.invalidate();
+                    gameView.invalidate();
+                    nextView.invalidate();
                     break;
             }
         }
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gameController = new GameController(this, handler);
         //初始化视图
         initView();
+        //初始化下一塊佈局
+        initNextView();
         //初始化监听器
         initListener();
     }
@@ -55,20 +62,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //1，得到父容器
         FrameLayout layoutGame = (FrameLayout) findViewById(R.id.fl_game);
         //2，实例化游戏区域
-        view = new View(this) {
+        gameView = new View(this) {
             @Override
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                //绘制画布
-                gameController.draw(canvas);
+                gameController.drawGameLayout(canvas);
             }
         };
         //3，设置游戏区域大小
-        view.setLayoutParams(new FrameLayout.LayoutParams(Config.FL_WIDTH, Config.FL_HEIGHT));
+        gameView.setLayoutParams(new FrameLayout.LayoutParams(Config.FL_WIDTH, Config.FL_HEIGHT));
         //3，設置背景顔色
-        view.setBackgroundColor(0x10000000);
+        gameView.setBackgroundColor(0x10000000);
         //4，添加到父容器内
-        layoutGame.addView(view);
+        layoutGame.addView(gameView);
+    }
+
+    /**
+     * 實例化下一塊預覽區域
+     */
+    public void initNextView() {
+        //1，得到父容器
+        FrameLayout layoutNext = (FrameLayout) findViewById(R.id.fl_next);
+        //2，实例化下一塊區域
+        nextView = new View(this) {
+            @Override
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                gameController.drawNextLayout(canvas,nextView.getWidth());
+            }
+        };
+        //3，设置下一塊區域大小
+        nextView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
+        //3，設置背景顔色
+        nextView.setBackgroundColor(0x10000000);
+        //4，添加到父容器内
+        layoutNext.addView(nextView);
     }
 
     /**
@@ -90,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         gameController.onclick(v.getId());
         //重绘View
-        view.invalidate();
+        gameView.invalidate();
+        nextView.invalidate();
     }
 
 

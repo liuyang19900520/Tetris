@@ -26,6 +26,13 @@ public class BoxModel {
     //方块画笔
     public Paint boxPainnt;
 
+    //下一塊方塊
+    public Point[] boxNext;
+    //下一塊方塊類型
+    public int boxNextType;
+    //下一塊方塊格子大小
+    public int boxNextSize;
+
     //上下文
     private Context context;
 
@@ -56,59 +63,108 @@ public class BoxModel {
     }
 
     /**
+     * 繪製下一個
+     *
+     * @param canvas
+     * @param width
+     */
+    public void drawNextBox(Canvas canvas, int width) {
+
+        if (boxNext != null) {
+            if (boxNextSize == 0) {
+                boxNextSize = width / 10;
+            }
+            for (int i = 0; i < boxNext.length; i++) {
+                canvas.drawRect((boxNext[i].x) * boxNextSize,
+                        (boxNext[i].y + 1) * boxNextSize,
+                        (boxNext[i].x) * boxNextSize + boxNextSize,
+                        (boxNext[i].y + 1) * boxNextSize + boxNextSize,
+                        boxPainnt);
+
+                Log.e("boxNext[i].x", "boxNext[i].x==" + boxNext[i].x);
+                Log.e(" boxNext[i].y", " boxNext[i].y==" + boxNext[i].y);
+                Log.e(" boxNextSize", " boxNextSize==" + boxNextSize);
+            }
+        }
+
+    }
+
+    /**
      * 生成方块
      */
     public void newBoxes() {
+
+        if (boxNext == null) {
+            //生成下一塊
+            newNextBox();
+        }
+        //這一塊==下一塊
+        boxs = boxNext;
+        boxType = boxNextType;
+
+        newNextBox();
+
+
+    }
+
+    /***
+     * 生成下一塊方塊
+     */
+    private void newNextBox() {
+
         //随机数生成方块
         Random random = new Random();
-        boxType = random.nextInt(7);
+        boxNextType = random.nextInt(7);
 
-        switch (boxType) {
+
+        //生成下一塊
+        switch (boxNextType) {
             //田
             case 0:
                 //初始化方塊
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxRed));
-                boxs = new Point[]{new Point(4, 0), new Point(5, 0), new Point(4, 1), new Point(5, 1)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxRed));
+                boxNext = new Point[]{new Point(4, 0), new Point(5, 0), new Point(4, 1), new Point(5, 1)};
                 break;
 
             //L
             case 1:
                 //初始化方塊
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxOrange));
-                boxs = new Point[]{new Point(4, 1), new Point(5, 0), new Point(3, 1), new Point(5, 1)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxOrange));
+                boxNext = new Point[]{new Point(4, 1), new Point(5, 0), new Point(3, 1), new Point(5, 1)};
                 break;
 
             //J
             case 2:
                 //初始化方塊
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxYellow));
-                boxs = new Point[]{new Point(4, 1), new Point(3, 0), new Point(3, 1), new Point(5, 1)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxYellow));
+                boxNext = new Point[]{new Point(4, 1), new Point(3, 0), new Point(3, 1), new Point(5, 1)};
                 break;
 
             //s
             case 3:
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxGreen));
-                boxs = new Point[]{new Point(4, 1), new Point(3, 1), new Point(4, 0), new Point(5, 0)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxGreen));
+                boxNext = new Point[]{new Point(4, 1), new Point(3, 1), new Point(4, 0), new Point(5, 0)};
                 break;
 
             //z
             case 4:
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxBlue));
-                boxs = new Point[]{new Point(4, 1), new Point(3, 0), new Point(4, 0), new Point(5, 1)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxBlue));
+                boxNext = new Point[]{new Point(4, 1), new Point(3, 0), new Point(4, 0), new Point(5, 1)};
                 break;
 
             //I
             case 5:
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxDarkBlue));
-                boxs = new Point[]{new Point(4, 1), new Point(4, 0), new Point(4, 2), new Point(4, 3)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxDarkBlue));
+                boxNext = new Point[]{new Point(4, 1), new Point(4, 0), new Point(4, 2), new Point(4, 3)};
                 break;
 
             //倒T
             case 6:
-                boxPainnt.setColor(context.getResources().getColor(R.color.boxPurple));
-                boxs = new Point[]{new Point(4, 1), new Point(3, 1), new Point(5, 1), new Point(4, 0)};
+//                boxPainnt.setColor(context.getResources().getColor(R.color.boxPurple));
+                boxNext = new Point[]{new Point(4, 1), new Point(3, 1), new Point(5, 1), new Point(4, 0)};
                 break;
         }
+
     }
 
 
@@ -181,4 +237,6 @@ public class BoxModel {
         //如果這個邊界和地圖上面的點是true，那麽就是代表出街了。
         return (x < 0 || y < 0 || x >= mapModel.maps.length || y >= mapModel.maps[0].length || mapModel.maps[x][y]);
     }
+
+
 }

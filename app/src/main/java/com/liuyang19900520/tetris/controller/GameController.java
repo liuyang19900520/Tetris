@@ -8,7 +8,7 @@ import android.os.Message;
 
 import com.liuyang19900520.tetris.Config;
 import com.liuyang19900520.tetris.R;
-import com.liuyang19900520.tetris.ScreenUtils;
+import com.liuyang19900520.tetris.utils.ScreenUtils;
 import com.liuyang19900520.tetris.model.BoxModel;
 import com.liuyang19900520.tetris.model.MapModel;
 
@@ -35,9 +35,6 @@ public class GameController {
     //用Activity交互的handler
     public Handler handler;
 
-    //方块大小(格子)
-    public int boxSize;
-
     public GameController(Context c, Handler handler) {
         this.context = c;
         this.handler = handler;
@@ -58,7 +55,7 @@ public class GameController {
         Config.FL_WIDTH = Config.FL_HEIGHT / 2;
 
         //初始化方塊大小  游戲區域/10
-        boxSize = Config.FL_WIDTH / Config.MAP_X;
+        int boxSize = Config.FL_WIDTH / Config.MAP_X;
 
         //实例化地图模型
         mapModel = new MapModel(context, boxSize, Config.FL_WIDTH, Config.FL_HEIGHT);
@@ -168,7 +165,7 @@ public class GameController {
      *
      * @param canvas
      */
-    public void draw(Canvas canvas) {
+    public void drawGameLayout(Canvas canvas) {
         //绘制地图
         mapModel.drawMap(canvas);
         //绘制方块
@@ -179,6 +176,14 @@ public class GameController {
         mapModel.drawState(canvas, isOver, isPause);
     }
 
+    /**
+     * 繪製預覽區域
+     * @param canvas
+     * @param width
+     */
+    public void drawNextLayout(Canvas canvas, int width) {
+        boxModel.drawNextBox(canvas,width);
+    }
 
     public void onclick(int id) {
         switch (id) {
@@ -231,4 +236,6 @@ public class GameController {
                 break;
         }
     }
+
+
 }
