@@ -8,9 +8,12 @@ import android.os.Message;
 
 import com.liuyang19900520.tetris.Config;
 import com.liuyang19900520.tetris.R;
+import com.liuyang19900520.tetris.model.ScoreModel;
 import com.liuyang19900520.tetris.utils.ScreenUtils;
 import com.liuyang19900520.tetris.model.BoxModel;
 import com.liuyang19900520.tetris.model.MapModel;
+
+import static com.liuyang19900520.tetris.Config.MSG_SCORE;
 
 /**
  * Created by LiuYang on 2017/9/12.
@@ -35,6 +38,8 @@ public class GameController {
     //用Activity交互的handler
     public Handler handler;
 
+    public ScoreModel scoreModel;
+
     public GameController(Context c, Handler handler) {
         this.context = c;
         this.handler = handler;
@@ -54,6 +59,8 @@ public class GameController {
         Config.FL_HEIGHT = height - ll_bottom;
         Config.FL_WIDTH = Config.FL_HEIGHT / 2;
 
+        Config.PADDING_X = width / 20;
+
         //初始化方塊大小  游戲區域/10
         int boxSize = Config.FL_WIDTH / Config.MAP_X;
 
@@ -61,6 +68,7 @@ public class GameController {
         mapModel = new MapModel(context, boxSize, Config.FL_WIDTH, Config.FL_HEIGHT);
         //实例化方块
         boxModel = new BoxModel(context, boxSize);
+        scoreModel = new ScoreModel();
     }
 
     /**
@@ -135,7 +143,14 @@ public class GameController {
         }
 
         //消行处理
-        mapModel.cleanLine();
+        int lines = mapModel.cleanLine();
+        //加分处理
+        scoreModel.score = scoreModel.score(lines);
+
+        Message msgScore = handler.obtainMessage();
+        msgScore.what = MSG_SCORE;
+        msgScore.obj = scoreModel.score;
+        handler.sendMessage(msgScore);
 
         //3，生成新的方块
         if (!isOver && !isPause) {
@@ -148,6 +163,7 @@ public class GameController {
         //游戏未结束
         return false;
     }
+
 
     public void setPause() {
         //前提是游戏未结束
@@ -178,11 +194,12 @@ public class GameController {
 
     /**
      * 繪製預覽區域
+     *
      * @param canvas
      * @param width
      */
     public void drawNextLayout(Canvas canvas, int width) {
-        boxModel.drawNextBox(canvas,width);
+        boxModel.drawNextBox(canvas, width);
     }
 
     public void onclick(int id) {

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.liuyang19900520.tetris.controller.GameController;
 
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //声明游戏控制器
     public GameController gameController;
 
+    private TextView tvHigh, tvNow;
+
     //主页Handler
     Handler handler = new Handler() {
         @Override
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     gameView.invalidate();
                     nextView.invalidate();
                     break;
+                case Config.MSG_SCORE:
+                    tvNow.setText((Integer) msg.obj + "分");
             }
         }
     };
@@ -71,10 +77,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         //3，设置游戏区域大小
         gameView.setLayoutParams(new FrameLayout.LayoutParams(Config.FL_WIDTH, Config.FL_HEIGHT));
+        gameView.setPadding(Config.PADDING_X, Config.PADDING_X, Config.PADDING_X, Config.PADDING_X);
         //3，設置背景顔色
         gameView.setBackgroundColor(0x10000000);
         //4，添加到父容器内
         layoutGame.addView(gameView);
+
+        //设置信息区域
+        LinearLayout ll_right = (LinearLayout) findViewById(R.id.ll_right);
+        ll_right.setPadding(0, Config.PADDING_X, Config.PADDING_X, Config.PADDING_X);
+
+        tvHigh = (TextView) findViewById(R.id.tv_high_score);
+        tvNow = (TextView) findViewById(R.id.tv_now_score);
     }
 
     /**
@@ -88,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                gameController.drawNextLayout(canvas,nextView.getWidth());
+                gameController.drawNextLayout(canvas, nextView.getWidth());
             }
         };
         //3，设置下一塊區域大小

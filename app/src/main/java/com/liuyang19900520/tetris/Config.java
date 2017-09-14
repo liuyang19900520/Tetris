@@ -6,7 +6,7 @@ package com.liuyang19900520.tetris;
 
 public class Config {
 
-    public static final int LL_BOTTOM=200;
+    public static final int LL_BOTTOM = 200;
 
     public static final int MAP_X = 10;
     public static final int MAP_Y = 20;
@@ -16,4 +16,8 @@ public class Config {
     public static int FL_HEIGHT;
 
     public static final int MSG_INVALIDATE = 0X001;
+    public static final int MSG_SCORE = 0X002;
+
+    public static int PADDING_X = 0;
+    public static int PADDING_Y = 0;
 }

@@ -92,7 +92,9 @@ public class MapModel {
 
 
     //执行消行（主方法）
-    public void cleanLine() {
+    public int cleanLine() {
+
+        int lines = 0;
 
         for (int y = maps[0].length - 1; y > 0; y--) {
             //判断消行
@@ -101,9 +103,11 @@ public class MapModel {
                 deleteLine(y);
                 //从消的哪一行重新开始便利
                 y++;
+                lines++;
             }
 
         }
+        return lines;
     }
 
     //消行判断，判断行的执行在上级方法中，所以这里就只判断列

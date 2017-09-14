@@ -23,22 +23,51 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/boxBlue"
-                    android:text="Next" />
+                    android:text="Next"
+                    android:textColor="@color/boxBlue" />
 
                 <FrameLayout
                     android:id="@+id/fl_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="最高分数" />
+
+                <TextView
+                    android:id="@+id/tv_high_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="最高分数" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="当前分数" />
+
+                <TextView
+                    android:id="@+id/tv_now_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0分" />
 
             </LinearLayout>
 
