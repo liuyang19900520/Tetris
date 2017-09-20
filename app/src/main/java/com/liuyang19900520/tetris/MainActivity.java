@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     nextView.invalidate();
                     break;
                 case Config.MSG_SCORE:
-                    tvNow.setText((Integer) msg.obj + "分");
+                    tvNow.setText((Integer) msg.getData().getInt("score") + "分");
+                    tvHigh.setText((Integer) msg.getData().getInt("highScore") + "分");
             }
         }
     };
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initNextView();
         //初始化监听器
         initListener();
+
+
     }
 
 
@@ -124,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_quickdown).setOnClickListener(this);
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_pause).setOnClickListener(this);
-
     }
 
 

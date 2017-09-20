@@ -98,9 +98,9 @@ public class MapModel {
 
         for (int y = maps[0].length - 1; y > 0; y--) {
             //判断消行
-            if (checkLine(y)) {
+            if (checkLine(y)) {//y=18
                 //执行消行
-                deleteLine(y);
+                deleteLine(y);//y=18
                 //从消的哪一行重新开始便利
                 y++;
                 lines++;
@@ -112,10 +112,10 @@ public class MapModel {
 
     //消行判断，判断行的执行在上级方法中，所以这里就只判断列
     //子方法
-    public boolean checkLine(int y) {
+    public boolean checkLine(int y) {//y=18
         //maps.length是10，也就是说现在判断一列的内容
         for (int x = 0; x < maps.length; x++) {
-            if (!maps[x][y]) {
+            if (!maps[x][y]) {//map[0-19][18]
                 return false;
             }
         }
@@ -126,9 +126,9 @@ public class MapModel {
     /*
     delete方法
      */
-    public void deleteLine(int dy) {
+    public void deleteLine(int dy) {//dy=18
         //map[0].length==20,也就数现在才开始判断横行开始判断
-        for (int y = maps[0].length - 1; y > 0; y--) {
+        for (int y = dy; y > 0; y--) {
             for (int x = 0; x < maps.length; x++) {
                 maps[x][y] = maps[x][y - 1];
             }

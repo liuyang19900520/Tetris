@@ -3,6 +3,7 @@ package com.liuyang19900520.tetris.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -13,6 +14,7 @@ import com.liuyang19900520.tetris.utils.ScreenUtils;
 import com.liuyang19900520.tetris.model.BoxModel;
 import com.liuyang19900520.tetris.model.MapModel;
 
+import static com.liuyang19900520.tetris.Config.MSG_AUXILIARY;
 import static com.liuyang19900520.tetris.Config.MSG_SCORE;
 
 /**
@@ -68,7 +70,20 @@ public class GameController {
         mapModel = new MapModel(context, boxSize, Config.FL_WIDTH, Config.FL_HEIGHT);
         //实例化方块
         boxModel = new BoxModel(context, boxSize);
-        scoreModel = new ScoreModel();
+        scoreModel = new ScoreModel(context);
+
+        scoreModel.updateHighScore();
+        updateScoreView();
+    }
+
+    private void updateScoreView() {
+        Message msgScore = handler.obtainMessage();
+        msgScore.what = MSG_SCORE;
+        Bundle b = new Bundle();
+        b.putInt("score", scoreModel.score);
+        b.putInt("highScore", scoreModel.highScore);
+        msgScore.setData(b);
+        handler.sendMessage(msgScore);
     }
 
     /**
@@ -146,11 +161,8 @@ public class GameController {
         int lines = mapModel.cleanLine();
         //加分处理
         scoreModel.score = scoreModel.score(lines);
-
-        Message msgScore = handler.obtainMessage();
-        msgScore.what = MSG_SCORE;
-        msgScore.obj = scoreModel.score;
-        handler.sendMessage(msgScore);
+        scoreModel.updateHighScore();
+        updateScoreView();
 
         //3，生成新的方块
         if (!isOver && !isPause) {
@@ -175,6 +187,7 @@ public class GameController {
             }
         }
     }
+
 
     /**
      * 绘制方法，绘制地图，方块，辅助线
@@ -251,6 +264,7 @@ public class GameController {
             case R.id.btn_pause:
                 setPause();
                 break;
+
         }
     }
 

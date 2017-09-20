@@ -17,6 +17,7 @@ public class Config {
 
     public static final int MSG_INVALIDATE = 0X001;
     public static final int MSG_SCORE = 0X002;
+    public static final int MSG_AUXILIARY = 0X003;
 
     public static int PADDING_X = 0;
     public static int PADDING_Y = 0;
